@@ -1,0 +1,25 @@
+{
+    "name": "ajou-pay-server",
+    "version": "1.0.0",
+    "description": "ajou-pay server",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "SeungHunHan",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.20.2",
+        "express": "^4.18.2",
+        "morgan": "^1.10.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.23.0",
+        "@babel/core": "^7.23.0",
+        "@babel/node": "^7.22.19",
+        "@babel/polyfill": "^7.12.1",
+        "@babel/preset-env": "^7.22.20",
+        "babel-loader": "^9.1.3"
+    }
+}

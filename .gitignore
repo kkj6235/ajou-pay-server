@@ -1,0 +1,25 @@
+# Logs and Databases
+*.log
+*.sqlite
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# IDEs and editors
+/.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
