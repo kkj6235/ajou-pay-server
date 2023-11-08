@@ -2,14 +2,13 @@ var express = require('express');
 var app = express();
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var api = require('./api');
 const express_session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
-const controller = require('./api/user/user.controller');
 const cookieParser = require('cookie-parser');
-const serveStatic = require('serve-static');
-const path = require('path');
+const shop = require('./api/shop');
+const user = require('./api/user');
+const controller = require('./api/user/user.controller');
 
 require('dotenv').config();
 
@@ -33,8 +32,8 @@ app.use(
         }),
     }),
 );
-
-app.use('/api', api);
+app.use('/shop', shop);
+app.use('/user', user);
 
 app.listen(3000, () => {
     console.log('Server Running');

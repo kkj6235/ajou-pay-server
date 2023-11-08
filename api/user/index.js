@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./user.controller');
-const express_session = require('express-session');
-const MongoStore = require('connect-mongo');
-const mongoose = require('mongoose');
 
 router.get('/login', controller.getLogin);
 router.post('/login', controller.postLogin);
