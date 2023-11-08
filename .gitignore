@@ -1,6 +1,7 @@
 # Logs and Databases
 *.log
 *.sqlite
+.env
 
 # Dependency directories
 node_modules/
