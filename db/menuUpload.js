@@ -25,13 +25,13 @@ const sheetNames = [
     '옥미관',
 ];
 
-// sheetNames.forEach((sheetName) => {
-//     let Upload = mongoose.model(sheetName, menuSchema);
-//
-//     let worksheet = workbook.Sheets[sheetName];
-//     let excelData = xlsx.utils.sheet_to_json(worksheet);
-//     saveData(excelData, Upload);
-// });
+sheetNames.forEach((sheetName) => {
+    let Upload = mongoose.model(sheetName, menuSchema);
+
+    let worksheet = workbook.Sheets[sheetName];
+    let excelData = xlsx.utils.sheet_to_json(worksheet);
+    saveData(excelData, Upload);
+});
 
 function saveMenu(data, Upload) {
     let newData = new Upload({

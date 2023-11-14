@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const express = require('express');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const app = express();
 let schema = require('schema');
-const { userSchema } = require('./myschema');
+const mySchema = require('./myschema');
 
 // MongoDB 연결
 mongoose.connect(process.env.MONGO_URI, {
@@ -13,22 +13,22 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const xlsx = require('xlsx');
 const workbook = xlsx.readFile('db.xlsx');
-const sheetName = 'user';
-const Upload = mongoose.model(sheetName, userSchema);
+const sheetName = 'store';
+const Upload = mongoose.model(sheetName, mySchema.storeSchema);
 
 const worksheet = workbook.Sheets[sheetName];
 const excelData = xlsx.utils.sheet_to_json(worksheet);
 
 function saveOrder(data) {
     let newData = new Upload({
-        user_id: data['회원ID'],
-        store_id: data['가게ID'],
-        payment_method: data['결제수단'],
-        total_price: data['통합가격'],
-        created_time: new Date(data['주문시간']),
-        takeout: data['포장여부'],
-        menuField: [],
+        userId: data['회원ID'],
+        shopId: data['가게ID'],
+        items: [],
+        paymentMethod: data['결제수단'],
         waitingCount: data['대기번호'],
+        takeout: data['포장여부'],
+        totalPrice: data['통합가격'],
+        createdTime: new Date(data['주문시간']),
     });
 
     let menujson = JSON.parse(data['메뉴ID']);
@@ -36,15 +36,15 @@ function saveOrder(data) {
     if (Array.isArray(menujson)) {
         menujson.forEach((json) => {
             let key = Object.keys(json).join();
-            newData['menuField'].push({
-                menu_id: key,
+            newData['items'].push({
+                menuId: key,
                 quantity: json[key],
             });
         });
     } else {
         let key = Object.keys(menujson).join();
-        newData['menuField'].push({
-            menu_id: key,
+        newData['items'].push({
+            menuId: key,
             quantity: menujson[key],
         });
     }
@@ -55,18 +55,19 @@ function saveStore(data) {
         _id: data['가게ID'],
         name: data['가게이름'],
         waitingOrderCount: data['대기주문수'],
+        location: data['위치'],
     });
     return newData;
 }
 
 function saveUser(data) {
     let newData = new Upload({
-        login_id: data['로그인ID'],
+        loginId: data['로그인ID'],
         name: data['이름'],
         password: data['비밀번호'],
         phone: data['휴대폰번호'],
         email: data['이메일'],
-        created_date: new Date(data['생성일']),
+        createdDate: new Date(data['생성일']),
     });
     return newData;
 }
@@ -76,7 +77,7 @@ function saveData() {
     excelData.forEach((data) => {
         // DataModel을 사용하여 MongoDB에 데이터 저장
 
-        let newData = saveUser(data);
+        let newData = saveStore(data);
 
         newData
             .save()
