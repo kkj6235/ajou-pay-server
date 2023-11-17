@@ -1,7 +1,6 @@
-const myschema = require('../../db/myschema');
-const { model } = require('mongoose');
+var mongoose = require('mongoose');
 
-const User = model('User', myschema.userSchema);
+const User = mongoose.model('User');
 
 const getLogin = (req, res) => {
     if (req.session.user) {

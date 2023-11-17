@@ -6,9 +6,6 @@ const express_session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const shop = require('./api/shop');
-const user = require('./api/user');
-const controller = require('./api/user/user.controller');
 
 require('dotenv').config();
 
@@ -18,10 +15,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+try {
+    mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+    console.log('MongoDB Connected');
+} catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+}
+
 app.use(
     express_session({
         secret: process.env.SECRET_KEY,
@@ -32,6 +36,12 @@ app.use(
         }),
     }),
 );
+
+require('./db/models/User');
+
+const shop = require('./api/shop');
+const user = require('./api/user');
+
 app.use('/shop', shop);
 app.use('/user', user);
 
