@@ -6,6 +6,7 @@ const express_session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
+app.use(cors());
 
 try {
     mongoose.connect(process.env.MONGO_URI, {
@@ -45,7 +47,7 @@ const user = require('./api/user');
 app.use('/shop', shop);
 app.use('/user', user);
 
-app.listen(3000, () => {
+app.listen(8080, () => {
     console.log('Server Running');
 });
 
