@@ -39,9 +39,9 @@ app.use(
     }),
 );
 
+require('./db/models/Store');
 require('./db/models/Menu');
 require('./db/models/Order');
-require('./db/models/Store');
 require('./db/models/User');
 
 const shop = require('./api/shop');

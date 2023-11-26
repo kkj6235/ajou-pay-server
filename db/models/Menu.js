@@ -13,6 +13,7 @@ const menuSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        shopId: { type: mongoose.Schema.Types.Number, ref: 'Store' },
     },
     { versionKey: false },
 );
