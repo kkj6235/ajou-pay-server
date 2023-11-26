@@ -40,6 +40,7 @@ require('./db/models/Store');
 require('./db/models/Menu');
 require('./db/models/Order');
 require('./db/models/User');
+require('./db/models/Payment');
 
 const shop = require('./api/shop');
 const user = require('./api/user');
