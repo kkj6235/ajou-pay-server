@@ -18,10 +18,7 @@ app.use(cookieParser());
 app.use(cors());
 
 try {
-    mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB Connected');
 } catch (error) {
     console.error('MongoDB connection error:', error);
@@ -50,8 +47,9 @@ const user = require('./api/user');
 app.use('/shop', shop);
 app.use('/user', user);
 
-app.listen(8080, () => {
-    console.log('Server Running');
+const port = 8080;
+app.listen(port, () => {
+    console.log(`Server Running on port ${port}`);
 });
 
 module.exports = app;
