@@ -43,9 +43,11 @@ require('./db/models/User');
 
 const shop = require('./api/shop');
 const user = require('./api/user');
+const order = require('./api/order');
 
 app.use('/shop', shop);
 app.use('/user', user);
+app.use('/order', order);
 
 const port = 8080;
 app.listen(port, () => {
