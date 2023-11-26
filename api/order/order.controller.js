@@ -67,6 +67,7 @@ const postOrder = async (req, res) => {
             userId: req.session.user._id,
             shopId: shopId,
             items: items,
+            takeout: takeout,
             waitingCount: store.waitingOrderCount,
         });
 
