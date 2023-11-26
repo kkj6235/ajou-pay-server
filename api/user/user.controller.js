@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 let crypto = require('crypto');
-const { log } = require('console');
 require('dotenv').config({ path: '../../.env' });
 
 const postLogin = async (req, res) => {
@@ -61,7 +60,7 @@ const postRegister = async (req, res) => {
             password: hashedPassword,
             phone: data['phone'],
             email: data['email'],
-            created_date: new Date().getTime(),
+            createdDate: new Date().getTime(),
         });
 
         await user.save();
@@ -89,7 +88,7 @@ const getLogout = (req, res) => {
 const updateUser = async (req, res) => {
     if (req.session.user) {
         const data = req.body;
-        let id = req.param;
+        let id = req.params.userId;
         const user = await User.findOneAndUpdate(
             { loginId: id },
             {
