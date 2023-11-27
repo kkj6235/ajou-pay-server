@@ -125,9 +125,12 @@ const postOrder = async (req, res) => {
             approved: false,
         });
 
-        await payment.save();
+        const savedPayment = await payment.save();
 
-        const responseData = { ...kakaoResponse.data };
+        const responseData = {
+            ...kakaoResponse.data,
+            payment_id: savedPayment._id,
+        };
         delete responseData.tid;
 
         res.json(responseData);
