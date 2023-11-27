@@ -15,7 +15,9 @@ const paymentSchema = new mongoose.Schema(
         shopId: Number,
         items: [submenu],
         takeout: Boolean,
+        totalPrice: Number,
         waitingCount: Number,
+        approved: Boolean,
     },
     { versionKey: false },
 );

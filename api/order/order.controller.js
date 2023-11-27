@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 const axios = require('axios');
-const {CLIENT_URL, CLIENT_ROUTE} = require("../../common/constants");
+const { CLIENT_URL, CLIENT_ROUTE } = require('../../common/constants');
 const Store = mongoose.model('Store');
 const Menu = mongoose.model('Menu');
 const Order = mongoose.model('Order');
@@ -69,7 +69,9 @@ const postOrder = async (req, res) => {
             shopId: shopId,
             items: items,
             takeout: takeout,
+            totalPrice: totalAmount,
             waitingCount: store.waitingOrderCount,
+            approved: false,
         });
 
         await payment.save();
