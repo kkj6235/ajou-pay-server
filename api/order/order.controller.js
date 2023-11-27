@@ -7,6 +7,57 @@ const Order = mongoose.model('Order');
 const User = mongoose.model('User');
 const Payment = mongoose.model('Payment');
 
+const postVerifyOrder = async (req, res) => {
+    try {
+        const { payment_id, pg_token } = req.body;
+        const payment = await Payment.findById(payment_id);
+        if (!payment) {
+            return res.status(404).json({ message: 'Payment not found' });
+        }
+        const kakaoApproveData = {
+            cid: 'TC0ONETIME',
+            tid: payment.tid,
+            partner_order_id: payment.waitingCount.toString(),
+            partner_user_id: payment.userId.toString(),
+            pg_token: pg_token,
+        };
+
+        const kakaoResponse = await axios.post(
+            'https://kapi.kakao.com/v1/payment/approve',
+            kakaoApproveData,
+            {
+                headers: {
+                    Authorization: process.env.KAKAO_ADMIN,
+                    'Content-type':
+                        'application/x-www-form-urlencoded;charset=utf-8',
+                },
+            },
+        );
+
+        if (kakaoResponse.data.amount.total !== payment.totalPrice) {
+            return res.status(400).json({ message: 'Invalid total amount' });
+        }
+
+        const order = new Order({
+            userId: payment.userId,
+            shopId: payment.shopId,
+            items: payment.items,
+            paymentMethod: kakaoResponse.data.payment_method_type,
+            waitingCount: payment.waitingCount,
+            takeout: payment.takeout,
+            totalPrice: kakaoResponse.data.amount.total,
+            createdTime: new Date(kakaoResponse.data.approved_at),
+        });
+
+        await order.save();
+
+        res.json(order);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error occurred' });
+    }
+};
+
 const calculateItemPrice = async (item) => {
     const menu = await Menu.findById(item.menuId);
     return menu.price * item.quantity;
@@ -116,4 +167,4 @@ const getwaitingCountTicket = async (req, res) => {
     }
 };
 
-module.exports = { postOrder, getwaitingCountTicket };
+module.exports = { postOrder, getwaitingCountTicket, postVerifyOrder };
