@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 const axios = require('axios');
+const {CLIENT_URL, CLIENT_ROUTE} = require("../../common/constants");
 const Store = mongoose.model('Store');
 const Menu = mongoose.model('Menu');
 const Order = mongoose.model('Order');
@@ -43,9 +44,9 @@ const postOrder = async (req, res) => {
             total_amount: totalAmount,
             vat_amount: 0,
             tax_free_amount: 0,
-            approval_url: 'http://localhost:3000/success',
-            fail_url: 'http://localhost:3000/fail',
-            cancel_url: 'http://localhost:3000/cancel',
+            approval_url: `${CLIENT_URL}${CLIENT_ROUTE.SUCCESS}`,
+            fail_url: `${CLIENT_URL}${CLIENT_ROUTE.FAIL}`,
+            cancel_url: `${CLIENT_URL}${CLIENT_ROUTE.CANCEL}`,
         };
 
         console.log(kakaoPaymentData);
