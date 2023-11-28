@@ -13,7 +13,7 @@ const postLogin = async (req, res) => {
     }
     if (req.session.user) {
         console.log(req.session.user);
-        res.status(200).json({ message: 'Already logged in' });
+        return res.status(200).json({ message: 'Already logged in' });
     } else {
         const user = await User.findOne({ loginId: loginId });
 
@@ -26,9 +26,17 @@ const postLogin = async (req, res) => {
 
         if (match) {
             req.session.user = user;
-            res.status(200).json(user);
+            return res.status(200).json({
+                createdDate: user.createdDate,
+                email: user.email,
+                loginId: user.loginId,
+                name: user.name,
+                phone: user.phone,
+                status: user.status,
+                _id: user._id
+            });
         } else {
-            res.status(401).json({ message: 'Incorrect password.' });
+            return res.status(401).json({ message: 'Incorrect password.' });
         }
     }
 };

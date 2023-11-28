@@ -7,15 +7,19 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const { CLIENT_URL } = require('./common/constants');
 
 require('dotenv').config();
 
+app.use(cors({
+    origin: CLIENT_URL,
+    credentials: true
+}));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
-app.use(cors());
 
 try {
     mongoose.connect(process.env.MONGO_URI);
