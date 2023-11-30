@@ -5,12 +5,12 @@ const Menu = mongoose.model('Menu');
 const getShop = async (req, res) => {
     try {
         if (!req.session.user) {
-            res.status(403).send({ message: '인증오류' });
+            return res.status(403).send({ message: '인증오류' });
         }
         const stores = await Store.find({});
-        res.json(stores);
+        return res.json(stores);
     } catch (error) {
-        res.status(500).send({ message: '서버 오류가 발생했습니다.' });
+        return res.status(500).send({ message: '서버 오류가 발생했습니다.' });
     }
 };
 
@@ -32,11 +32,17 @@ const getShopMenu = async (req, res) => {
         // Find menu items that belong to the shop
         const menuItems = await Menu.find({ shopId: shopId });
 
+        // FInd shop item about the information of the shop
+        const shopItem = await Store.findOne({ _id: shopId });
+
         // Respond with the menu items
-        res.json(menuItems);
+        return res.json({
+            shop: shopItem,
+            menus: menuItems
+        });
     } catch (error) {
         // Handle any errors that occur during the process
-        res.status(500).send({ message: '서버 오류가 발생했습니다.' });
+        return res.status(500).send({ message: '서버 오류가 발생했습니다.' });
     }
 };
 
