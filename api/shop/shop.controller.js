@@ -5,7 +5,7 @@ const Menu = mongoose.model('Menu');
 const getShop = async (req, res) => {
     try {
         if (!req.session.user) {
-            return res.status(403).send({ message: '인증오류' });
+            return res.status(401).send({ message: 'Unauthorized' });
         }
         const stores = await Store.find({});
         return res.json(stores);
@@ -18,7 +18,7 @@ const getShopMenu = async (req, res) => {
     try {
         // Check if the user is authenticated
         if (!req.session.user) {
-            return res.status(403).json({ message: '인증오류' });
+            return res.status(401).json({ message: 'Unauthorized' });
         }
 
         // Retrieve the shopId from the request parameters and convert it to an integer

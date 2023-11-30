@@ -66,7 +66,7 @@ const calculateItemPrice = async (item) => {
 const postOrder = async (req, res) => {
     try {
         if (!req.session.user) {
-            return res.status(403).send({ message: '인증오류' });
+            return res.status(401).send({ message: 'Unauthorized' });
         }
 
         const { shopId, items, takeout } = req.body;
@@ -143,7 +143,7 @@ const postOrder = async (req, res) => {
 const getwaitingCountTicket = async (req, res) => {
     try {
         if (!req.session.user) {
-            res.status(403).send({ message: '인증오류' });
+            res.status(401).send({ message: 'Unauthorized' });
         }
         // Retrieve the store ID from the request parameters
         const storeId = req.params.id;
