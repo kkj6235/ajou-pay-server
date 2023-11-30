@@ -2,6 +2,15 @@ var mongoose = require('mongoose');
 let crypto = require('crypto');
 require('dotenv').config({ path: '../../.env' });
 
+
+const roleSchema = new mongoose.Schema(
+    {
+        isAdmin: {type : Boolean, default: false},
+        shopId: { type: mongoose.Schema.Types.Number, ref: 'Store'},
+    },
+    { versionKey: false, _id: false },
+);
+
 const userSchema = new mongoose.Schema(
     {
         loginId: String,
@@ -14,6 +23,7 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
+        role: roleSchema ,
     },
     { versionKey: false },
 );

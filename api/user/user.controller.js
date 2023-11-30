@@ -12,15 +12,15 @@ const postLogin = async (req, res) => {
             .json({ message: 'Login ID and password are required.' });
     }
     if (req.session.user) {
-        console.log(req.session.user);
         return res.status(200).json({ message: 'Already logged in' });
-    } else {
+    }
+    else {
         const user = await User.findOne({ loginId: loginId });
 
         if (!user) {
-            res.status(404).json({ message: 'User not found.' });
-            return;
+            return res.status(404).json({ message: 'User not found.' });
         }
+
 
         const match = await user.compare(password, user.password);
 
@@ -33,7 +33,8 @@ const postLogin = async (req, res) => {
                 name: user.name,
                 phone: user.phone,
                 status: user.status,
-                _id: user._id
+                _id: user._id,
+                role: user.role,
             });
         } else {
             return res.status(401).json({ message: 'Incorrect password.' });
@@ -69,39 +70,57 @@ const postRegister = async (req, res) => {
             phone: data['phone'],
             email: data['email'],
             createdDate: new Date().getTime(),
+            role: {
+                isAdmin: false,
+            }
         });
 
         await user.save();
 
-        res.status(200).json(user);
+        return res.status(200).json({
+            createdDate: user.createdDate,
+            email: user.email,
+            loginId: user.loginId,
+            name: user.name,
+            phone: user.phone,
+            status: user.status,
+            _id: user._id,
+            role: user.role,
+        });
+
     } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 const getLogout = (req, res) => {
     if (req.session.user) {
         req.session.destroy((err) => {
             if (err) {
-                res.status(500).json({
+                return res.status(500).json({
                     message: 'Error while destroying session.',
                 });
-                return;
             }
-            res.status(200).json({ message: 'Logout successful.' });
+            return res.status(200).json({ message: 'Logout successful.' });
         });
     } else {
-        res.status(401).json({ message: 'Not logged in.' });
+        return res.status(401).json({ message: 'Not logged in.' });
     }
 };
 const updateUser = async (req, res) => {
     if (req.session.user) {
         const data = req.body;
         let id = req.params.userId;
+
+        const hashedPassword = crypto
+            .createHmac('sha256', process.env.SECRET_KEY)
+            .update(data['password'])
+            .digest('hex');
+
         const user = await User.findOneAndUpdate(
             { loginId: id },
             {
                 name: data['name'],
-                password: data['password'],
+                password: hashedPassword,
                 phone: data['phone'],
                 email: data['email'],
             },
@@ -109,13 +128,21 @@ const updateUser = async (req, res) => {
         );
 
         if (!user) {
-            res.status(404).json({ message: 'User not found.' });
-            return;
+            return res.status(404).json({ message: 'User not found.' });
         }
         req.session.user = user;
-        res.status(200).json(user);
+        return res.status(200).json({
+            createdDate: user.createdDate,
+            email: user.email,
+            loginId: user.loginId,
+            name: user.name,
+            phone: user.phone,
+            status: user.status,
+            _id: user._id,
+            role: user.role,
+        });
     } else {
-        res.status(401).json({ message: 'Unauthorized: Not logged in.' });
+        return res.status(401).json({ message: 'Unauthorized: Not logged in.' });
     }
 };
 
