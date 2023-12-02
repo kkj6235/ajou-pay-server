@@ -9,6 +9,10 @@ const Payment = mongoose.model('Payment');
 
 const postVerifyOrder = async (req, res) => {
     try {
+        if (!req.session.user) {
+            return res.status(401).send({ message: 'Unauthorized' });
+        }
+
         const { payment_id, pg_token } = req.body;
         const payment = await Payment.findById(payment_id);
         if (!payment) {
