@@ -7,6 +7,23 @@ const Order = mongoose.model('Order');
 const User = mongoose.model('User');
 const Payment = mongoose.model('Payment');
 
+const getOrderList = async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(401).send({ message: 'Unauthorized' });
+        }
+
+        const userId = req.session.user._id;
+
+        const orders = await Order.find({ userId: userId });
+
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error occurred' });
+    }
+};
+
 const postVerifyOrder = async (req, res) => {
     try {
         if (!req.session.user) {
@@ -175,4 +192,9 @@ const getwaitingCountTicket = async (req, res) => {
     }
 };
 
-module.exports = { postOrder, getwaitingCountTicket, postVerifyOrder };
+module.exports = {
+    postOrder,
+    getwaitingCountTicket,
+    postVerifyOrder,
+    getOrderList,
+};
