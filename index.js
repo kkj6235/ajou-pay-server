@@ -8,13 +8,17 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { CLIENT_URL } = require('./common/constants');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 require('dotenv').config();
 
-app.use(cors({
-    origin: CLIENT_URL,
-    credentials: true
-}));
+app.use(
+    cors({
+        origin: CLIENT_URL,
+        credentials: true,
+    }),
+);
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,6 +44,22 @@ app.use(
     }),
 );
 
+//FOR SOCKET
+const sessionMiddleware = express_session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+    }),
+});
+app.use(sessionMiddleware);
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
+});
+const clientSocketHandler = require('./socket/client.handler');
+clientSocketHandler.init(io);
+
 require('./db/models/Store');
 require('./db/models/Menu');
 require('./db/models/Order');
@@ -49,13 +69,15 @@ require('./db/models/Payment');
 const shop = require('./api/shop');
 const user = require('./api/user');
 const order = require('./api/order');
+const admin = require('./api/admin');
 
 app.use('/shop', shop);
 app.use('/user', user);
 app.use('/order', order);
+app.use('/admin', admin);
 
 const port = 8080;
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server Running on port ${port}`);
 });
 

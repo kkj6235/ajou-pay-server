@@ -51,6 +51,7 @@ const postVerifyOrder = async (req, res) => {
             takeout: payment.takeout,
             totalPrice: kakaoResponse.data.amount.total,
             createdTime: new Date(kakaoResponse.data.approved_at),
+            status: 'Pending',
         });
 
         await order.save();

@@ -18,8 +18,22 @@ const orderSchema = new mongoose.Schema(
         takeout: Boolean,
         totalPrice: Number,
         createdTime: Date,
+        status: String,
     },
     { versionKey: false },
 );
+
+const { getIo, getUserSockets } = require('../../socket/client.handler');
+const io = getIo();
+const userSockets = getUserSockets();
+
+orderSchema.post('save', (order) => {
+    //console.log(userSockets);
+    const userId = order.userId;
+    if (userSockets[userId]) {
+        const socketId = userSockets[userId];
+        io.to(socketId).emit('order-status-updated', order);
+    }
+});
 
 mongoose.model('Order', orderSchema);
