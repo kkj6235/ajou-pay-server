@@ -18,7 +18,7 @@ const updateOrderStatus = async (req, res) => {
     }
 
     const { orderId, newStatus } = req.body;
-    const validStatuses = ['Pending', 'Preparing', 'Ready'];
+    const validStatuses = ['Pending', 'Preparing', 'Ready', 'Completed'];
 
     if (!validStatuses.includes(newStatus)) {
         return res.status(400).send({
