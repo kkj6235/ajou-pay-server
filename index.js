@@ -15,9 +15,9 @@ const io = new Server(server, {
     cors: {
         origin: '*',
         methods: '*',
-        credentials: true
-    }
-})
+        credentials: true,
+    },
+});
 
 require('dotenv').config();
 
