@@ -11,7 +11,7 @@ module.exports = {
             if (!session || !session.user) {
                 console.log('No session or user data, disconnecting socket');
                 socket.emit(
-                    'no-session',
+                    'auth',
                     'You are not authorized to connect. Disconnecting.',
                 );
                 socket.disconnect(true);

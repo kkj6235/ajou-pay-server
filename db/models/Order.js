@@ -40,7 +40,7 @@ orderSchema.post('save', (order) => {
     const userId = order.userId;
     if (userSockets[userId]) {
         const socketId = userSockets[userId];
-        io_client.to(socketId).emit('order-status-updated', order);
+        io_client.to(socketId).emit('order', order);
     }
 });
 
