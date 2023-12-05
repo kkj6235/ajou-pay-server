@@ -34,7 +34,7 @@ const adminSockets = getAdminSockets();
 orderSchema.post('save', (order) => {
     if (adminSockets[order.shopId]) {
         const socketId = adminSockets[order.shopId];
-        io_admin.to(socketId).emit('order-created', order);
+        io_admin.to(socketId).emit('order', order);
     }
 
     const userId = order.userId;
