@@ -9,7 +9,15 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { CLIENT_URL } = require('./common/constants');
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const { Server } = require('socket.io');
+
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: '*',
+        credentials: true
+    }
+})
 
 require('dotenv').config();
 
