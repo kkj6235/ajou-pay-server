@@ -23,16 +23,24 @@ const orderSchema = new mongoose.Schema(
     { versionKey: false },
 );
 
-const { getIo, getUserSockets } = require('../../socket/client.handler');
-const io = getIo();
+const { getClientIo, getUserSockets } = require('../../socket/client.handler');
+const io_client = getClientIo();
 const userSockets = getUserSockets();
 
+const { getAdminIo, getAdminSockets } = require('../../socket/admin.handler');
+const io_admin = getAdminIo();
+const adminSockets = getAdminSockets();
+
 orderSchema.post('save', (order) => {
-    //console.log(userSockets);
+    if (adminSockets[order.shopId]) {
+        const socketId = adminSockets[order.shopId];
+        io_admin.to(socketId).emit('order-created', order);
+    }
+
     const userId = order.userId;
     if (userSockets[userId]) {
         const socketId = userSockets[userId];
-        io.to(socketId).emit('order-status-updated', order);
+        io_client.to(socketId).emit('order-status-updated', order);
     }
 });
 

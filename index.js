@@ -53,12 +53,23 @@ const sessionMiddleware = express_session({
         mongoUrl: process.env.MONGO_URI,
     }),
 });
+// DEFAULT SOCKET
 app.use(sessionMiddleware);
 io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 const clientSocketHandler = require('./socket/client.handler');
 clientSocketHandler.init(io);
+//
+
+//ADMIN SOCKET
+const adminNamespace = io.of('/admin');
+adminNamespace.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
+});
+const adminSocketHandler = require('./socket/admin.handler');
+adminSocketHandler.init(adminNamespace);
+//
 
 require('./db/models/Store');
 require('./db/models/Menu');

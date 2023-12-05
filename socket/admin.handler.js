@@ -1,7 +1,7 @@
 var express = require('express');
 
 let io;
-const userSockets = {};
+const adminSockets = {};
 
 module.exports = {
     init: (IO) => {
@@ -11,14 +11,20 @@ module.exports = {
             if (!session || !session.user) {
                 console.log('No session or user data, disconnecting socket');
                 socket.emit(
-                    'no-session',
+                    'auth',
                     'You are not authorized to connect. Disconnecting.',
                 );
                 socket.disconnect(true);
+            } else if (
+                !session.user.role.isAdmin ||
+                !session.user.role.shopId
+            ) {
+                console.log('User is not admin, disconnecting socket');
+                socket.emit('auth', 'User is not admin');
+                socket.disconnect(true);
             } else {
                 console.log('A user connected', session);
-
-                userSockets[session.user._id] = socket.id;
+                adminSockets[session.user.role.shopId] = socket.id;
 
                 socket.on('disconnect', () => {
                     console.log('User disconnected');
@@ -27,13 +33,13 @@ module.exports = {
         });
         return io;
     },
-    getClientIo: () => {
+    getAdminIo: () => {
         if (!io) {
             throw new Error('Socket.io not initialized!');
         }
         return io;
     },
-    getUserSockets: () => {
-        return userSockets;
+    getAdminSockets: () => {
+        return adminSockets;
     },
 };
