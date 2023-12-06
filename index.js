@@ -89,11 +89,13 @@ const shop = require('./api/shop');
 const user = require('./api/user');
 const order = require('./api/order');
 const admin = require('./api/admin');
+const menu = require('./api/menu');
 
 app.use('/shop', shop);
 app.use('/user', user);
 app.use('/order', order);
 app.use('/admin', admin);
+app.use('/menu', menu);
 
 const port = 8080;
 server.listen(port, () => {
