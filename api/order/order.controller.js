@@ -173,39 +173,8 @@ const postOrder = async (req, res) => {
     }
 };
 
-const getwaitingCountTicket = async (req, res) => {
-    try {
-        if (!req.session.user) {
-            res.status(401).send({ message: 'Unauthorized' });
-        }
-        // Retrieve the store ID from the request parameters
-        const storeId = req.params.id;
-
-        // Find the store by ID
-        let store = await Store.findById(storeId);
-
-        // Check if the store exists
-        if (!store) {
-            return res.status(404).json({ message: 'Store not found' });
-        }
-
-        // Increment the waitingOrderCount
-        store.waitingOrderCount += 1;
-
-        // Save the updated store
-        await store.save();
-
-        // Respond with the updated store information
-        res.json(store);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        res.status(500).send({ message: 'Server error occurred' });
-    }
-};
-
 module.exports = {
     postOrder,
-    getwaitingCountTicket,
     postVerifyOrder,
     getOrderList,
 };
