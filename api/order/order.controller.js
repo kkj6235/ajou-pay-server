@@ -14,8 +14,19 @@ const getOrderList = async (req, res) => {
         }
 
         const userId = req.session.user._id;
+        const orders = await Order.find({ userId: userId }).lean();
 
-        const orders = await Order.find({ userId: userId });
+        for (let order of orders) {
+            const shop = await Store.findById(order.shopId);
+            order.shop = {
+                _id: shop._id,
+                name: shop.name,
+                icon: shop.icon,
+                location: shop.location,
+                openStatus: shop.openStatus,
+                waitingOrderCount: shop.waitingOrderCount,
+            };
+        }
 
         res.status(200).json(orders);
     } catch (error) {
