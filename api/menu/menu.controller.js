@@ -3,6 +3,12 @@ const Menu = mongoose.model('Menu');
 
 const getMenuById = async (req, res) => {
     try {
+        if (!req.session.user) {
+            return res
+                .status(401)
+                .send({ message: 'Unauthorized: No session found' });
+        }
+
         const menuId = req.params.menuId;
         if (!mongoose.Types.ObjectId.isValid(menuId)) {
             return res.status(400).send({ message: 'Invalid Menu ID' });
