@@ -11,9 +11,14 @@ const { CLIENT_URL } = require('./common/constants');
 const server = require('http').Server(app);
 const { Server } = require('socket.io');
 
+const ALLOWED_ORIGIN = [
+    'http://localhost:3000',
+    'https://ajou-order.netlify.app',
+];
+
 const io = new Server(server, {
     cors: {
-        origin: CLIENT_URL,
+        origin: ALLOWED_ORIGIN,
         methods: '*',
         credentials: true,
     },
@@ -23,7 +28,7 @@ require('dotenv').config();
 
 app.use(
     cors({
-        origin: CLIENT_URL,
+        origin: ALLOWED_ORIGIN,
         credentials: true,
     }),
 );
