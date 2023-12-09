@@ -29,6 +29,7 @@ require('dotenv').config();
 app.use(
     cors({
         origin: ALLOWED_ORIGIN,
+        methods: '*',
         credentials: true,
     }),
 );
