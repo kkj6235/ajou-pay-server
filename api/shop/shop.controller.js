@@ -14,6 +14,26 @@ const getShop = async (req, res) => {
     }
 };
 
+const getShopById = async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(401).send({ message: 'Unauthorized' });
+        }
+        const shopId = parseInt(req.params.shopId);
+
+        if (isNaN(shopId)) {
+            return res.status(400).json({ message: 'Invalid shop ID' });
+        }
+
+        const shop = await Store.findById(shopId);
+
+        res.status(200).json(shop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error occurred' });
+    }
+};
+
 const getShopMenu = async (req, res) => {
     try {
         if (!req.session.user) {
@@ -38,4 +58,4 @@ const getShopMenu = async (req, res) => {
     }
 };
 
-module.exports = { getShop, getShopMenu };
+module.exports = { getShop, getShopById, getShopMenu };
