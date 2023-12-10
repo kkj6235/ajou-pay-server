@@ -91,12 +91,14 @@ require('./db/models/Order');
 require('./db/models/User');
 require('./db/models/Payment');
 
+const indexx = require('./api');
 const shop = require('./api/shop');
 const user = require('./api/user');
 const order = require('./api/order');
 const admin = require('./api/admin');
 const menu = require('./api/menu');
 
+app.use('/api', indexx);
 app.use('/api/shop', shop);
 app.use('/api/user', user);
 app.use('/api/order', order);
