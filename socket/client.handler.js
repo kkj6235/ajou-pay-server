@@ -2,6 +2,7 @@ var express = require('express');
 
 let io;
 const userSockets = {};
+const adminSockets = {};
 
 module.exports = {
     init: (IO) => {
@@ -16,9 +17,17 @@ module.exports = {
                 );
                 socket.disconnect(true);
             } else {
-                console.log('A user connected', session);
-
-                userSockets[session.user._id] = socket.id;
+                if (session.user.role.isAdmin || session.user.role.shopId) {
+                    // ADMIN CASE
+                    console.log('SOCKET ADMIN CASE');
+                    console.log('A user connected', session);
+                    adminSockets[session.user.role.shopId] = socket.id;
+                } else {
+                    // USER CASE
+                    console.log('SOCKET USER CASE');
+                    console.log('A user connected', session);
+                    userSockets[session.user._id] = socket.id;
+                }
 
                 socket.on('disconnect', () => {
                     console.log('User disconnected');
@@ -27,7 +36,7 @@ module.exports = {
         });
         return io;
     },
-    getClientIo: () => {
+    getIo: () => {
         if (!io) {
             throw new Error('Socket.io not initialized!');
         }
@@ -35,5 +44,8 @@ module.exports = {
     },
     getUserSockets: () => {
         return userSockets;
+    },
+    getAdminSockets: () => {
+        return adminSockets;
     },
 };

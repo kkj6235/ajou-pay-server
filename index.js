@@ -8,17 +8,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { CLIENT_URL } = require('./common/constants');
-//const server = require('http').Server(app);
+const server = require('http').Server(app);
 const { Server } = require('socket.io');
-
-const fs = require('fs');
-const https = require('https');
-
-//FOR SSL
-const privateKey = fs.readFileSync('server.key', 'utf8');
-const certificate = fs.readFileSync('server.crt', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
-const server = https.createServer(credentials, app);
 
 const ALLOWED_ORIGIN = [
     'http://localhost:3000',
@@ -84,16 +75,7 @@ defaultNamespace.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 const clientSocketHandler = require('./socket/client.handler');
-clientSocketHandler.init(defaultNamespace);
-//
-
-//ADMIN SOCKET
-const adminNamespace = io.of('/ws/admin');
-adminNamespace.use((socket, next) => {
-    sessionMiddleware(socket.request, {}, next);
-});
-const adminSocketHandler = require('./socket/admin.handler');
-adminSocketHandler.init(adminNamespace);
+clientSocketHandler.init(io);
 //
 
 require('./db/models/Store');
