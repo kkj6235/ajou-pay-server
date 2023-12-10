@@ -70,7 +70,7 @@ const sessionMiddleware = express_session({
 });
 // DEFAULT SOCKET
 app.use(sessionMiddleware);
-const defaultNamespace = io.of('/api');
+const defaultNamespace = io.of('/ws');
 defaultNamespace.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
@@ -79,7 +79,7 @@ clientSocketHandler.init(defaultNamespace);
 //
 
 //ADMIN SOCKET
-const adminNamespace = io.of('/api/admin');
+const adminNamespace = io.of('/ws/admin');
 adminNamespace.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
