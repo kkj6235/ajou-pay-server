@@ -12,7 +12,8 @@ const server = require('http').Server(app);
 const { Server } = require('socket.io');
 
 const ALLOWED_ORIGIN = [
-    'http://localhost:3000',
+    'http://localhost',
+    'http://localhost:80',
     'https://ajou-order.netlify.app',
     'https://ajou-order.vercel.app',
 ];
@@ -20,7 +21,7 @@ const ALLOWED_ORIGIN = [
 const io = new Server(server, {
     cors: {
         origin: ALLOWED_ORIGIN,
-        methods: '*',
+        methods: ['GET', 'POST', 'PATCH'],
         credentials: true,
     },
 });
@@ -30,7 +31,7 @@ require('dotenv').config();
 app.use(
     cors({
         origin: ALLOWED_ORIGIN,
-        methods: '*',
+        methods: ['GET', 'POST', 'PATCH'],
         credentials: true,
     }),
 );
@@ -70,12 +71,21 @@ const sessionMiddleware = express_session({
 });
 // DEFAULT SOCKET
 app.use(sessionMiddleware);
-const defaultNamespace = io.of('/ws');
+const defaultNamespace = io.of('/api');
 defaultNamespace.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 const clientSocketHandler = require('./socket/client.handler');
 clientSocketHandler.init(defaultNamespace);
+//
+
+//ADMIN SOCKET
+const adminNamespace = io.of('/api/admin');
+adminNamespace.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
+});
+const adminSocketHandler = require('./socket/admin.handler');
+adminSocketHandler.init(adminNamespace);
 //
 
 require('./db/models/Store');
@@ -84,14 +94,12 @@ require('./db/models/Order');
 require('./db/models/User');
 require('./db/models/Payment');
 
-const indexx = require('./api');
 const shop = require('./api/shop');
 const user = require('./api/user');
 const order = require('./api/order');
 const admin = require('./api/admin');
 const menu = require('./api/menu');
 
-app.use('/api', indexx);
 app.use('/api/shop', shop);
 app.use('/api/user', user);
 app.use('/api/order', order);
