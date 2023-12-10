@@ -75,7 +75,7 @@ defaultNamespace.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 const clientSocketHandler = require('./socket/client.handler');
-clientSocketHandler.init(io);
+clientSocketHandler.init(defaultNamespace);
 //
 
 //ADMIN SOCKET
