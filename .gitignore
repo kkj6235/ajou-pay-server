@@ -24,3 +24,6 @@ jspm_packages/
 Icon?
 ehthumbs.db
 Thumbs.db
+
+server.crt
+server.key
