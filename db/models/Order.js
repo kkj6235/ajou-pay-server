@@ -33,6 +33,7 @@ const userSockets = getUserSockets();
 const adminSockets = getAdminSockets();
 
 orderSchema.post('save', (order) => {
+    console.log('ORDER SAVEED: ', order, adminSockets, userSockets);
     if (adminSockets[order.shopId]) {
         const socketId = adminSockets[order.shopId];
         io.to(socketId).emit('order', order);
