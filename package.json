@@ -22,12 +22,8 @@
         "mongoose": "^8.0.0",
         "mongoose-session": "^0.0.4",
         "morgan": "^1.10.0",
-        "nunjucks": "^3.2.4",
-        "schema": "^0.2.1",
-        "serve-static": "^1.15.0",
         "session": "^0.1.0",
-        "socket.io": "^4.7.2",
-        "xlsx": "^0.18.5"
+        "socket.io": "^4.7.2"
     },
     "devDependencies": {
         "@babel/cli": "^7.23.0",
