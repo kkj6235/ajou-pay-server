@@ -14,6 +14,7 @@ const { Server } = require('socket.io');
 const ALLOWED_ORIGIN = [
     'http://localhost:3000',
     'https://ajou-order.netlify.app',
+    'https://ajou-order.vercel.app',
 ];
 
 const io = new Server(server, {
