@@ -31,7 +31,7 @@ const getOrderList = async (req, res) => {
         res.status(200).json(orders);
     } catch (error) {
         console.error(error);
-        res.status(500).send({ message: 'Server error occurred' });
+        res.status(500).send({ message: error });
     }
 };
 
@@ -87,7 +87,7 @@ const postVerifyOrder = async (req, res) => {
         res.json(order);
     } catch (error) {
         console.error(error);
-        res.status(500).send({ message: 'Server error occurred' });
+        res.status(500).send({ message: error });
     }
 };
 
