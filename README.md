@@ -28,7 +28,7 @@ Nodejs를 활용하여 온라인 사전주문 웹 시스템의 프로토타입�
 ## 📝 프로젝트 아키텍쳐
 
 ![img.png](img.png)
-
+![img_1.png](img_1.png)
 ## 📌 주요 기능
 
 - 유저용 
@@ -47,19 +47,19 @@ Nodejs를 활용하여 온라인 사전주문 웹 시스템의 프로토타입�
 
 - [API 상세 설명](https://git.ajou.ac.kr/ajou-pay/server/-/wikis/API-docs) 
 
-| Method | URI                       | Description   |
-|--------|---------------------------|---------------|
-| GET    | `/api/shop`               | 매장 조회         |
-| GET    | `/api/shop/{shopId}/menu` | 실시간 메뉴 조회     |
-| GET    | `/api/order`                  | 유저의 주문 현황     |
-| GET    | `/api/menu`                   | 전체 메뉴 조회      |
-| GET    | `/api/menu/{menuId}`          | 특정 메뉴 조회      |
-| GET      | `/api/order`                  | 유저 주문 목록 조회   |
-| POST   | `/api/order`                  | 카카오페이 결제 요청   |
-| POST   | `/api/order/approve`          | 카카오페이 결제 검증요청 |
-| GET    | `/api/admin/order`            | 가게 주문정보 조회    |
-| PATCH  | `/api/admin/order`            | 주문 상태 변경      |
-| POST   | `/api/user/login`             | 유저 로그인        |
-| POST   | `/api/user/register`          | 유저 회원가입       |
-| PUT    | `/api/user/{userId}`          | 유저 정보 업데이트    |
-| GET    | `/api/user/logout`            | 유저 로그아웃       |
+| Method | URI                       | Description    |
+|--------|---------------------------|----------------|
+| GET    | `/api/shop`               | 전체 매장 조회       |
+| GET    | `/api/shop/{shopId}` | 매장 조회          |
+| GET    | `/api/shop/{shopId}/menu` | 특정 가게 전체 메뉴 조회 |
+| GET    | `/api/menu`                   | 전체 메뉴 조회       |
+| GET    | `/api/menu/{menuId}`          | 특정 메뉴 조회       |
+| GET    | `/api/order`                  | 유저의 주문 현황      |
+| POST   | `/api/order`                  | 카카오페이 결제 요청    |
+| POST   | `/api/order/approve`          | 카카오페이 결제 검증요청  |
+| GET    | `/api/admin/order`            | 가게 주문정보 조회     |
+| PATCH  | `/api/admin/order`            | 주문 상태 변경       |
+| POST   | `/api/user/login`             | 유저 로그인         |
+| POST   | `/api/user/register`          | 유저 회원가입        |
+| PUT    | `/api/user/{userId}`          | 유저 정보 업데이트     |
+| GET    | `/api/user/logout`            | 유저 로그아웃        |
